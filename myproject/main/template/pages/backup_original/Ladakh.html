@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ladakh & Chandrataal Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/ladakh.jpg' %}" alt="Ladakh">
+  </div>
+    
+    <div class="dest-content">
+      <h2 class="dest-title">LADAKH & CHANDRATAAL ADVENTURE</h2>
+      <p class="dest-description">
+        Explore the breathtaking landscapes of Ladakh along with the magical Chandrataal Lake on this adventurous 10-day journey. Experience high mountain passes, ancient monasteries, white deserts, crystal lakes, and the resilient Himalayan culture.
+      </p>
+
+      <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+      <div class="highlights-grid">
+        <div class="highlight-item">✔ Pangong Lake Visit</div>
+        <div class="highlight-item">✔ Nubra Valley & Sand Dunes</div>
+        <div class="highlight-item">✔ Khardung La Pass (Highest)</div>
+        <div class="highlight-item">✔ Chandrataal Lake Camping</div>
+        <div class="highlight-item">✔ Leh Local Sightseeing</div>
+        <div class="highlight-item">✔ Magnetic Hill Experience</div>
+        <div class="highlight-item">✔ Premium Hotel & Camp Stay</div>
+        <div class="highlight-item">✔ All Permits Included</div>
+      </div>
+
+      <div class="action-group">
+        <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+        <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+        <a href="Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+      </div>
+    </div>
+    
+    <a href="/" class="back-btn-link">&#x2b05; Back to Home</a>
+  </div>
+{% endblock %}
+

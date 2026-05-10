@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Amritsar Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/Amritsar.jpg' %}" alt="Amritsar">
+  </div>
+  
+  <div class="dest-content">
+    <h2 class="dest-title">AMRITSAR TOUR PACKAGE</h2>
+    <p class="dest-description">
+      Explore the spiritual heart of Punjab. Amritsar, home to the iconic Golden Temple, offers a profound blend of devotion, history, and vibrant culture. Experience the stunning Wagah Border ceremony and witness the rich heritage of Jallianwala Bagh.
+    </p>
+
+    <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+    <div class="highlights-grid">
+      <div class="highlight-item">✔ Golden Temple Visit</div>
+      <div class="highlight-item">✔ Wagah Border Ceremony</div>
+      <div class="highlight-item">✔ Jallianwala Bagh Tour</div>
+      <div class="highlight-item">✔ Premium Hotel Stay</div>
+      <div class="highlight-item">✔ Local Sightseeing</div>
+      <div class="highlight-item">✔ AC Transportation</div>
+    </div>
+
+    <div class="action-group">
+      <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+      <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+      <a href="/Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+    </div>
+  </div>
+  
+  <a href="/" class="back-btn-link">⬅ Back to Home</a>
+</div>
+{% endblock %}
+

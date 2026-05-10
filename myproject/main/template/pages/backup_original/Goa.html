@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Goa Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/goaa.jpg' %}" alt="Goa">
+  </div>
+    
+    <div class="dest-content">
+      <h2 class="dest-title">GOA TOUR PACKAGE (8 DAYS)</h2>
+      <p class="dest-description">
+        Experience the vibrant beaches, nightlife, Portuguese heritage, and scenic coastline of Goa with this relaxing 8-day tour package. Perfect for couples, friends, and family vacations. Relax, party, and discover the soul of the coast.
+      </p>
+
+      <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+      <div class="highlights-grid">
+        <div class="highlight-item">✔ North & South Goa Tour</div>
+        <div class="highlight-item">✔ 8 Days / 7 Nights Stay</div>
+        <div class="highlight-item">✔ Famous Beach Visits</div>
+        <div class="highlight-item">✔ Heritage Church Tours</div>
+        <div class="highlight-item">✔ Daily Breakfast Included</div>
+        <div class="highlight-item">✔ All Local Transfers</div>
+      </div>
+
+      <div class="action-group">
+        <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+        <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+        <a href="/Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+      </div>
+    </div>
+    
+    <a href="/" class="back-btn-link">⬅ Back to Home</a>
+  </div>
+{% endblock %}
+

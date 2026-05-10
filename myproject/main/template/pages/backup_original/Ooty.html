@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ooty Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/ooty22.avif' %}" alt="Ooty">
+  </div>
+    
+    <div class="dest-content">
+      <h2 class="dest-title">OOTY: QUEEN OF HILL STATIONS</h2>
+      <p class="dest-description">
+        Ooty, located in the Nilgiri Hills, is famous for its pleasant climate, vast tea gardens, and peaceful atmosphere. It is the perfect escape for nature lovers and families seeking tranquility. Experience the charm of the Nilgiri Mountain Railway and the beauty of Pykara Lake.
+      </p>
+
+      <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+      <div class="highlights-grid">
+        <div class="highlight-item">✔ Ooty Lake Boating</div>
+        <div class="highlight-item">✔ Botanical Garden Tour</div>
+        <div class="highlight-item">✔ Doddabetta Peak Visit</div>
+        <div class="highlight-item">✔ Coonoor Tea Garden</div>
+        <div class="highlight-item">✔ Nilgiri Mountain Railway</div>
+        <div class="highlight-item">✔ Pykara Lake & Falls</div>
+        <div class="highlight-item">✔ Premium Hotel Stay</div>
+        <div class="highlight-item">✔ Pickup & Drop</div>
+      </div>
+
+      <div class="action-group">
+        <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+        <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+        <a href="Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+      </div>
+    </div>
+    
+    <a href="/" class="back-btn-link">&#x2b05; Back to Home</a>
+  </div>
+{% endblock %}
+

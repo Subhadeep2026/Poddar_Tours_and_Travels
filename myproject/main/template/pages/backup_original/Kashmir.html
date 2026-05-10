@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kashmir Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/KASHMIR.jpg' %}" alt="Kashmir">
+  </div>
+    
+    <div class="dest-content">
+      <h2 class="dest-title">KASHMIR: PARADISE ON EARTH</h2>
+      <p class="dest-description">
+        Kashmir is one of the most beautiful regions in India, often called <b>“Paradise on Earth”</b>. It is famous for its scenic valleys, snow-capped mountains, Dal Lake, and rich cultural heritage. Experience the serenity of a Houseboat stay and the thrill of a Gondola ride in Gulmarg.
+      </p>
+
+      <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+      <div class="highlights-grid">
+        <div class="highlight-item">✔ Dal Lake Shikara Ride</div>
+        <div class="highlight-item">✔ Luxury Houseboat Stay</div>
+        <div class="highlight-item">✔ Gulmarg Gondola Ride</div>
+        <div class="highlight-item">✔ Sonmarg & Pahalgam Tour</div>
+        <div class="highlight-item">✔ Mughal Gardens Visit</div>
+        <div class="highlight-item">✔ Premium Hotel Stay</div>
+        <div class="highlight-item">✔ Expert Tour Guide</div>
+        <div class="highlight-item">✔ Airport Pickup & Drop</div>
+      </div>
+
+      <div class="action-group">
+        <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+        <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+        <a href="/Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+      </div>
+    </div>
+    
+    <a href="/" class="back-btn-link">⬅ Back to Home</a>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Bootstrap Example{% endblock %}
+
+{% block extra_css %}
+<style>
+.container{
+    border: 6px solid blue;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    background-color: orangered;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Happy Republic Day</h1>
+  <p>Jai Hind.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Bootstrap Example{% endblock %}
+
+{% block extra_css %}
+<style>
+.btn-primary {
+    background-color:red;
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-sm p-5 my-5 bg-dark text-white text-center">
+  <h1>My First Page</h1>
+  <p>I love Coding</p>
+  <button type="button" class="btn btn-primary">Primary</button>
+</div>
+{% endblock %}

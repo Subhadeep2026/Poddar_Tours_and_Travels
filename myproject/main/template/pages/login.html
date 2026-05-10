@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+{% load static socialaccount %}
+
+{% block title %}Poddar Tours & Travels - Login / Register{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-wrapper {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url("{% static 'img/background.webp' %}") center/cover fixed no-repeat;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.auth-header p {
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.auth-tabs {
+  display: flex;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #a0a0a0;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.auth-tab.active {
+  color: #fff;
+  border-bottom: 2px solid var(--accent, #ffd700);
+}
+
+.auth-tab:hover:not(.active) {
+  color: #e0e0e0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.form-control-custom {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control-custom:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent, #ffd700);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.form-control-custom::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 38px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s;
+}
+
+.password-toggle:hover {
+  color: #fff;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 13px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  accent-color: var(--accent, #ffd700);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: var(--accent, #ffd700);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.btn-auth {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent, #ffd700);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  background: #ffea00;
+}
+
+.social-login {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-login p {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.social-login p::before,
+.social-login p::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 25%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.social-login p::before { left: 0; }
+.social-login p::after { right: 0; }
+
+.social-btns {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-social {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.btn-social:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.btn-social.google:hover { border-color: #db4437; color: #db4437; }
+.btn-social.facebook:hover { border-color: #4267B2; color: #4267B2; }
+.btn-social.apple:hover { border-color: #fff; color: #fff; }
+
+.auth-form {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.auth-form.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Icons via unicons or fontawesome (assuming standard setup, adding SVG icons) */
+</style>
+<!-- Adding a quick icons library just for social icons if needed, using SVG to be safe -->
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-container">
+    
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+      <div class="auth-tab" onclick="switchTab('register')">Register</div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form" class="auth-form active">
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Login to access your bookings and exclusive offers.</p>
+      </div>
+
+      <form action="{% url 'page' 'login' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="login">
+        
+        {% if messages %}
+        <div style="margin-bottom: 20px;">
+          {% for message in messages %}
+          <div style="padding: 10px; border-radius: 8px; font-size: 14px; margin-bottom: 10px; text-align: center;
+            {% if message.tags == 'error' %}background: rgba(255, 0, 0, 0.2); border: 1px solid red; color: #ffcccc;
+            {% else %}background: rgba(0, 255, 0, 0.2); border: 1px solid lime; color: #ccffcc;{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="login-id">Email / Login ID</label>
+          <input type="text" name="username" id="login-id" class="form-control-custom" placeholder="Enter your username or email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" name="password" id="login-password" class="form-control-custom" placeholder="Enter your password" required>
+          <span class="password-toggle" onclick="togglePassword('login-password', this)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </span>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" checked>
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-auth">Sign In</button>
+      </form>
+
+      <div class="social-login">
+        <p>Or continue with</p>
+        <div class="social-btns">
+          <a href="{% provider_login_url 'google' %}" class="btn-social google" title="Google">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81z"/></svg>
+          </a>
+          <a href="{% provider_login_url 'facebook' %}" class="btn-social facebook" title="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03.74-1.5 1.5-1.5h2v-4h-3c-3.1 0-4.5 1.95-4.5 4.5v3H8v4h2v10h4v-10z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" class="auth-form">
+      <div class="auth-header">
+        <h2>Create Account</h2>
+        <p>Join Poddar Tours & Travels for the best trips.</p>
+      </div>
+
+      <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Registration submission mocked');">
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-control-custom" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" class="form-control-custom" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" class="form-control-custom" placeholder="Enter your mobile number" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" class="form-control-custom" placeholder="Create a strong password" required oninput="checkPasswordStrength(this.value)">
+          
+          <div id="password-strength-box" style="margin-top: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin-top: 0; margin-bottom: 8px; font-size: 13px; color: #fff; font-weight: 600;">Password Requirements:</p>
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: #a0a0a0; line-height: 1.8;">
+              <li id="req-upper" style="transition: color 0.3s;"><span class="icon" style="display:inline-block; width:20px;">☐</span> Big Alphabet (A-Z)</li>
+              <li id="req-lower" style="transition: color 0.3s;"><span class="icon" style="display:inline-block; width:20px;">☐</span> Small Alphabet (a-z)</li>
+              <li id="req-num" style="transition: color 0.3s;"><span class="icon" style="display:inline-block; width:20px;">☐</span> Number (0-9)</li>
+              <li id="req-spec" style="transition: color 0.3s;"><span class="icon" style="display:inline-block; width:20px;">☐</span> Special Character (!@#$%^&*)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-confirm">Confirm Password</label>
+          <input type="password" id="reg-confirm" class="form-control-custom" placeholder="Repeat your password" required>
+        </div>
+
+        <button type="submit" class="btn-auth">Sign Up</button>
+      </form>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div id="forgot-form" class="auth-form">
+      <div class="auth-header">
+        <h2>Reset Password</h2>
+        <p>Enter your email address and we'll send you a link to reset your password.</p>
+      </div>
+
+      <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Reset link sent!'); switchTab('login');">
+        <div class="form-group">
+          <label for="reset-email">Email Address</label>
+          <input type="email" id="reset-email" class="form-control-custom" placeholder="Enter your registered email" required>
+        </div>
+
+        <button type="submit" class="btn-auth">Send Reset Link</button>
+        
+        <div style="text-align: center; margin-top: 15px;">
+          <a href="#" class="forgot-link" onclick="switchTab('login')">← Back to Login</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(tabId) {
+  // Update Tabs
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  if (tabId === 'login' || tabId === 'register') {
+    const tabs = document.querySelectorAll('.auth-tab');
+    if (tabId === 'login') tabs[0].classList.add('active');
+    if (tabId === 'register') tabs[1].classList.add('active');
+  }
+
+  // Update Forms
+  document.querySelectorAll('.auth-form').forEach(form => {
+    form.classList.remove('active');
+  });
+  
+  document.getElementById(tabId + '-form').classList.add('active');
+}
+
+function togglePassword(inputId, iconElement) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    iconElement.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"></path></svg>';
+  } else {
+    input.type = 'password';
+    iconElement.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+  }
+}
+
+function checkPasswordStrength(val) {
+  const requirements = [
+    { id: 'req-upper', regex: /[A-Z]/ },
+    { id: 'req-lower', regex: /[a-z]/ },
+    { id: 'req-num', regex: /[0-9]/ },
+    { id: 'req-spec', regex: /[^A-Za-z0-9]/ }
+  ];
+
+  requirements.forEach(req => {
+    const el = document.getElementById(req.id);
+    const icon = el.querySelector('.icon');
+    if (req.regex.test(val)) {
+      el.style.color = '#00ff00'; // Green text
+      icon.innerHTML = '☑️';
+    } else {
+      el.style.color = '#a0a0a0'; // Grey text
+      icon.innerHTML = '☐';
+    }
+  });
+}
+</script>
+{% endblock %}

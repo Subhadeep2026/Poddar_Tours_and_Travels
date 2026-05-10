@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Date of Journey – Poddar Tours & Travels{% endblock %}
+
+{% block extra_css %}
+<style>
+.accordion-button {
+  background: white;
+  color: var(--primary);
+  font-weight: 700;
+  border-radius: 12px !important;
+}
+
+.accordion-button:not(.collapsed) {
+  background: var(--primary);
+  color: white;
+}
+
+.accordion-item {
+  border: none;
+  margin-bottom: 15px;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table th {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.table td {
+  vertical-align: middle;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER + NAVBAR (SAME AS HOME PAGE) -->
+
+
+
+
+<!-- PAGE CONTENT -->
+<div class="container">
+  <div class="glass-container reveal" style="max-width: 900px; margin: 60px auto;">
+
+    <h2 style="text-align: center; color: var(--primary); margin-bottom: 35px;">📅 Date of Journey (2026)</h2>
+
+    <div class="accordion" id="tourAccordion">
+      <!-- Accordion content -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#june">
+            June 2026
+          </button>
+        </h2>
+        <div id="june" class="accordion-collapse collapse show">
+          <div class="accordion-body table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <th>Date</th><th>Package Destination</th><th>Days</th><th>Fare ₹</th>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Shimla – Kullu – Manali – Rohtang Pass</td>
+                <td>8</td>
+                <td>15,995</td>
+              </tr>
+              <tr>
+                <td>18</td>
+                <td>Sikkim – Darjeeling – Bhutan Border</td>
+                <td>10</td>
+                <td>22,500</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#july">
+            July 2026
+          </button>
+        </h2>
+        <div id="july" class="accordion-collapse collapse">
+          <div class="accordion-body table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <th>Date</th><th>Package Destination</th><th>Days</th><th>Fare ₹</th>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>Valley of Flowers & Hemkund Sahib Trek</td>
+                <td>7</td>
+                <td>12,495</td>
+              </tr>
+              <tr>
+                <td>22</td>
+                <td>Meghalaya (Shillong – Cherrapunji – Dawki)</td>
+                <td>6</td>
+                <td>14,000</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#aug">
+            August 2026
+          </button>
+        </h2>
+        <div id="aug" class="accordion-collapse collapse">
+          <div class="accordion-body table-responsive">
+            <table class="table table-hover">
+              <tr>
+                <th>Date</th><th>Package Destination</th><th>Days</th><th>Fare ₹</th>
+              </tr>
+              <tr>
+                <td>12</td>
+                <td>Spiti Valley Expedition</td>
+                <td>9</td>
+                <td>21,995</td>
+              </tr>
+              <tr>
+                <td>25</td>
+                <td>Andaman & Nicobar Islands (Monsoon Special)</td>
+                <td>7</td>
+                <td>28,500</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Poddar Tours & Travels - Our Tour Packages{% endblock %}
+
+{% block extra_css %}
+<style>
+.tour-hero {
+  padding: 80px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.05) 0%, rgba(27, 94, 32, 0.1) 100%);
+  margin-bottom: 40px;
+}
+
+.tour-hero h1 {
+  font-size: 48px;
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.tour-hero p {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.back-btn-container {
+  text-align: center;
+  margin: 60px 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="tour-hero reveal">
+  <h1>Discover Your Next Adventure</h1>
+  <p>From serene backwaters to majestic mountains, find the perfect getaway with Poddar Tours & Travels.</p>
+</section>
+
+<div class="tour-grid">
+  {% for tour in tours %}
+  <div class="travel-card reveal {% if forloop.counter|divisibleby:2 %}reveal-delay-1{% endif %}">
+    <div class="card-image-wrap">
+      <div style="position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 10; align-items: flex-start;">
+        {% for cat in tour.categories.all %}
+          <span class="category-badge" style="position: static;">{{ cat.name }}</span>
+        {% endfor %}
+      </div>
+      
+      {% if tour.image %}
+        <img src="{{ tour.image.url }}" alt="{{ tour.title }}">
+      {% else %}
+        <img src="{% static 'img/placeholder.jpg' %}" alt="{{ tour.title }}">
+      {% endif %}
+      
+      <div class="price-tag">₹{{ tour.price|floatformat:0 }}</div>
+    </div>
+    
+    <div class="travel-card-body">
+      <div class="duration-info">
+        <i class="fas fa-clock"></i> {{ tour.duration }}
+      </div>
+      <h4>{{ tour.title|title }}</h4>
+      <p>{{ tour.short_description|truncatechars:120 }}</p>
+      
+      <div class="card-footer">
+        <a href="{% url 'tour_detail' tour.slug %}" class="btn-premium" style="width: 100%; font-size: 14px; padding: 12px;">View Full Details</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <p style="text-align:center; width:100%; font-size: 1.2rem; margin-top:20px; color: #666;">
+      No tours available at the moment. We're currently updating our catalog!
+    </p>
+  {% endfor %}
+</div>
+
+<div class="back-btn-container">
+  <a href="/" class="btn-premium">⬅ Back to Home</a>
+</div>
+{% endblock %}

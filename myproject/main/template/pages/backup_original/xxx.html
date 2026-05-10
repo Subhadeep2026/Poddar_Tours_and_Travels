@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Poddar Tours & Travels - Home</title>
+    <link rel="stylesheet" href="../css/style.css">
+  </head>
+  <body>
+    <header>
+      <img src="../img/Logo.png" width="80" alt="Company Logo" style="vertical-align: middle;">
+      <span class="logo">Poddar Tours & Travels</span><br>
+      <span class="estd">Since 2026</span>
+      <p>19A Rabindra Sarani, Liluah, Howrah - 711203<br>Contact: 9903254599</p>
+      <nav>
+        <a href="../index.html" class="active">Home</a>
+        <a href="Tour.html">Tours</a>
+        <a href="Date.html">Date of Journey</a>
+        <a href="Feedback.html">Feedback</a>
+        <a href="rules.html">Rules and Regulations</a>
+        <a href="contactus.html">Contact Us</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Welcome to Poddar Tours & Travels</h1>
+        <p>Discover India’s beauty with us — safe, comfortable, and unforgettable journeys.</p>
+      </section>
+
+      <section class="services">
+        <div class="service">
+          <img src="../img/Tours.jpg" alt="Tours">
+          <h3>Exciting Tours</h3>
+          <p>From Kashmir to Kerala, explore breathtaking destinations curated for you.</p>
+        </div>
+        <div class="service">
+          <img src="../img/travel.avif" alt="Transport">
+          <h3>Comfortable Travel</h3>
+          <p>Modern buses and experienced drivers ensure a smooth journey.</p>
+        </div>
+        <div class="service">
+          <img src="../img/stays.jpg" alt="Stay">
+          <h3>Quality Stay</h3>
+          <p>Handpicked hotels and resorts for your comfort and relaxation.</p>
+        </div>
+      </section>
+
+      <section class="cta">
+        <h2>Plan Your Next Adventure</h2>
+        <a href="Tour.html">Explore Tours</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>📍 19A Rabindra Sarani, Liluah, Howrah - 711203 | 📞 Contact: 9903254599</p>
+      <p>&copy; 2026 Poddar Tours & Travels. All Rights Reserved.</p>
+    </footer>
+
+    <div id="layout-container"></div>
+
+    <script>
+      fetch("layout.html")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("layout-container").innerHTML = data;
+        });
+    </script>
+  </body>
+</html>

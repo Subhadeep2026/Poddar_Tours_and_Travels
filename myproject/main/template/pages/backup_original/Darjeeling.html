@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Darjeeling Tour – Poddar Tours & Travels{% endblock %}
+
+{% block content %}
+<div class="glass-container reveal" style="max-width: 1000px; margin: 60px auto; padding: 0; overflow: hidden;">
+  <div class="dest-hero">
+    <img src="{% static 'img/darjeeling.jpg' %}" alt="Darjeeling">
+  </div>
+    
+    <div class="dest-content">
+      <h2 class="dest-title">DARJEELING TOUR PACKAGE</h2>
+      <p class="dest-description">
+        Darjeeling is a charming hill station known for its lush tea gardens, cool climate, and stunning views of the Kanchenjunga range. It offers a perfect blend of nature, heritage, and peace. Experience the magical sunrise at Tiger Hill and a ride on the iconic Himalayan Toy Train.
+      </p>
+
+      <h3 style="color: var(--secondary); margin-bottom: 20px;">Package Highlights</h3>
+      <div class="highlights-grid">
+        <div class="highlight-item">✔ Tea Garden Visit</div>
+        <div class="highlight-item">✔ Tiger Hill Sunrise</div>
+        <div class="highlight-item">✔ Batasia Loop</div>
+        <div class="highlight-item">✔ Toy Train Ride</div>
+        <div class="highlight-item">✔ Mall Road Shopping</div>
+        <div class="highlight-item">✔ Premium Hotel Stay</div>
+        <div class="highlight-item">✔ Local Sightseeing</div>
+        <div class="highlight-item">✔ Pickup & Drop</div>
+      </div>
+
+      <div class="action-group">
+        <a href="tel:+919903254599" class="btn-premium">📞 Call to Book</a>
+        <a href="https://wa.me/919903254599" class="btn-premium" style="background: #25D366; color: white;">💬 WhatsApp Us</a>
+        <a href="/Tour.html" class="btn-premium" style="background: var(--secondary); color: white;">View All Tours</a>
+      </div>
+    </div>
+    
+    <a href="/" class="back-btn-link">⬅ Back to Home</a>
+  </div>
+
+  <div id="footer"></div>
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
+
