@@ -1,0 +1,21 @@
+🛠️ Technical Stack & Specifications
+
+1. Backend & Server
+- Framework: Django 4.2+ (Python)
+- Database: MySQL (Production database, with fallback/development SQLite configuration support in db.sqlite3).
+- Dependencies (from requirements.txt):
+  - mysqlclient (MySQL database adapter)
+  - Pillow (Image processing for user profiles, tour galleries, and categories)
+  - django-allauth (Authentication & social login integration support)
+  - django-crispy-forms & crispy-bootstrap5 (Form styling helpers)
+  - python-dotenv (Environment variable configuration)
+
+2. Frontend & Design System
+- Core: HTML5 semantic markup, CSS3 (Vanilla CSS), and client-side JavaScript.
+- Design Language: Premium emerald-green branding featuring glassmorphism, responsive layout structures, and micro-animations for transitions and hover effects.
+
+3. AI & Search Engine (RAG Architecture)
+- Large Language Model: Google Gemini API (google-generativeai client SDK) using the gemini-2.5-flash model.
+- Vector Search Engine:
+  - Model: sentence-transformers/all-MiniLM-L6-v2 (generates semantic embeddings for tour packages).
+  - Index: FAISS (IndexFlatL2 similarity metric) for low-latency vector retrieval.
