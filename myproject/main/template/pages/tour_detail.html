@@ -4,6 +4,7 @@
 {% block title %}{{ tour.title|title }} – Poddar Tours & Travels{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
   .detail-hero {
     position: relative;
@@ -409,7 +410,7 @@
           experience!</p>
       </div>
 
-      <a href="tel:+919903254599" class="btn-book-now">Book This Tour</a>
+      <button type="button" class="btn-book-now" data-bs-toggle="modal" data-bs-target="#bookingModal">Book This Tour</button>
 
       <div class="sidebar-contact">
         <a href="https://wa.me/919903254599" class="contact-link whatsapp">
@@ -429,4 +430,131 @@
     </div>
   </aside>
 </div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none;">
+      <div class="modal-header" style="background: var(--primary); color: white; border-bottom: none; padding: 20px 30px;">
+        <h5 class="modal-title" id="bookingModalLabel" style="font-weight: 700;">Book {{ tour.title }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding: 30px;">
+        <form method="POST" action="{% url 'tour_detail' tour.slug %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="book_tour">
+          
+          <div class="mb-3">
+            <label class="form-label" style="font-weight: 600;">Travel Date</label>
+            <input type="date" name="travel_date" class="form-control" style="padding: 12px; border-radius: 12px;" required>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label" style="font-weight: 600;">Adults</label>
+              <input type="number" id="num_adults" name="num_adults" class="form-control" style="padding: 12px; border-radius: 12px;" min="1" value="1" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label" style="font-weight: 600;">Children</label>
+              <input type="number" id="num_children" name="num_children" class="form-control" style="padding: 12px; border-radius: 12px;" min="0" value="0">
+              <div class="form-text" style="font-size: 12px;">Under 12 yrs (50% off)</div>
+            </div>
+          </div>
+          
+          <!-- Passenger Details Container -->
+          <div id="passenger-fields-container" style="margin-bottom: 20px;">
+            <h6 style="font-weight: 700; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;">Passenger Details</h6>
+            <div id="passenger-forms"></div>
+          </div>
+          
+          <!-- Payment Selection -->
+          <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+            <h6 style="font-weight: 700; margin-bottom: 15px;">Payment Method</h6>
+            
+            <div class="form-check" style="margin-bottom: 10px;">
+              <input class="form-check-input" type="radio" name="payment_method" id="pay_online" value="online" checked>
+              <label class="form-check-label" for="pay_online" style="font-weight: 600;">
+                <i class="fas fa-credit-card" style="color: var(--primary); margin-right: 5px;"></i> Pay Online Now
+              </label>
+            </div>
+            
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="payment_method" id="pay_offline" value="offline">
+              <label class="form-check-label" for="pay_offline" style="font-weight: 600;">
+                <i class="fas fa-wallet" style="color: #666; margin-right: 5px;"></i> Pay Later (Offline / At Office)
+              </label>
+            </div>
+          </div>
+          
+          <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
+            <p style="margin: 0; color: #666;">Price per adult: <strong>₹{{ tour.price|floatformat:0 }}</strong></p>
+            <p style="margin: 0; font-size: 13px; color: #888;">Payment will be collected after confirmation.</p>
+          </div>
+          
+          <button type="submit" class="btn-book-now" style="margin-bottom: 0;">Confirm Booking Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var allowedDates = {{ tour.parsed_upcoming_dates_json|safe }};
+    var config = {
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      placeholder: "Select an available departure date..."
+    };
+    if (allowedDates && allowedDates.length > 0) {
+        config.enable = allowedDates;
+    }
+    flatpickr("input[name='travel_date']", config);
+    
+    // Passenger logic
+    const adultsInput = document.getElementById('num_adults');
+    const childrenInput = document.getElementById('num_children');
+    const container = document.getElementById('passenger-forms');
+    
+    function generatePassengerFields() {
+      container.innerHTML = '';
+      const adults = parseInt(adultsInput.value) || 0;
+      const children = parseInt(childrenInput.value) || 0;
+      const totalPax = adults + children;
+      
+      for(let i=1; i<=totalPax; i++) {
+        let label = i <= adults ? `Adult ${i}` : `Child ${i - adults}`;
+        let html = `
+          <div class="pax-group" style="margin-bottom: 15px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 10px;">
+            <p style="font-weight: 600; font-size: 14px; margin-bottom: 10px; color: var(--primary);">Passenger ${i} (${label})</p>
+            <div class="row g-2">
+              <div class="col-md-5">
+                <input type="text" name="pax_name_${i}" class="form-control" placeholder="Full Name" required style="font-size: 14px;">
+              </div>
+              <div class="col-md-3">
+                <input type="number" name="pax_age_${i}" class="form-control" placeholder="Age" required style="font-size: 14px;" min="1" max="100">
+              </div>
+              <div class="col-md-4">
+                <select name="pax_gender_${i}" class="form-control" required style="font-size: 14px;">
+                  <option value="">Gender</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                  <option value="O">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+      }
+    }
+    
+    adultsInput.addEventListener('input', generatePassengerFields);
+    childrenInput.addEventListener('input', generatePassengerFields);
+    
+    // Initial generation
+    generatePassengerFields();
+  });
+</script>
 {% endblock %}

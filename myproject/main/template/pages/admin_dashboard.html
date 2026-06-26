@@ -492,7 +492,10 @@ body {
   <!-- Main Center Area -->
   <main class="admin-main">
     <div class="main-content-scroll">
-      <h1 class="page-title">Bookings Overview</h1>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 class="page-title" style="margin-bottom: 0;">Bookings Overview</h1>
+        <button onclick="document.getElementById('createBookingModal').style.display='flex'" style="background: #38bdf8; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">+ New Booking</button>
+      </div>
 
       <!-- Stats -->
       <div class="dash-stats-row">
@@ -521,11 +524,10 @@ body {
 
       <!-- Tabs -->
       <div class="admin-tabs">
-        <button class="active">All</button>
-        <button>Confirmed</button>
-        <button>Pending</button>
-        <button>Archived</button>
-        <button>Custom +</button>
+        <button class="active" onclick="filterBookings('all', this)">All</button>
+        <button onclick="filterBookings('confirmed', this)">Confirmed</button>
+        <button onclick="filterBookings('pending', this)">Pending</button>
+        <button onclick="filterBookings('cancelled', this)">Cancelled</button>
       </div>
 
       <!-- Table Container -->
@@ -542,46 +544,37 @@ body {
             </tr>
           </thead>
           <tbody>
-            <tr class="selected">
-              <td class="dash-checkbox-cell"><input type="checkbox" checked></td>
-              <td style="font-weight: 600; color: #0f172a;">Kashmir Valley Special incl. Flights</td>
-              <td>Rahul Sharma</td>
-              <td style="font-family: monospace; color: #64748b;">BK-456-BLU</td>
-              <td>15 Oct 2026</td>
-              <td><span class="dash-status-label">Confirmed</span></td>
-            </tr>
-            <tr>
+            {% for booking in bookings %}
+            <tr class="booking-row" data-status="{{ booking.status }}" onclick="updateRightPanel('{{ booking.tour.title|escapejs }}', '{{ booking.booking_id }}', '{{ booking.total_price|floatformat:0 }}', '{{ booking.user.first_name|default:booking.user.email|escapejs }}', '{{ booking.num_adults }} Adults, {{ booking.num_children }} Child', '{{ booking.travel_date }}', '{{ booking.status }}', '{{ booking.payment_method|title }}', '{{ booking.payment_status|title }}', this)">
+              <div class="passenger-data-{{ booking.booking_id }}" style="display: none;">
+                {% for pax in booking.passengers.all %}
+                  <div style="font-size: 13px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 5px; margin-bottom: 5px;">
+                    <strong>{{ pax.name }}</strong> ({{ pax.age }}y, {{ pax.gender }})
+                  </div>
+                {% empty %}
+                  <div style="font-size: 13px; color: #888;">No passenger details</div>
+                {% endfor %}
+              </div>
               <td class="dash-checkbox-cell"><input type="checkbox"></td>
-              <td style="font-weight: 600; color: #0f172a;">Kerala Backwaters Premium Houseboat</td>
-              <td>Priya Gupta</td>
-              <td style="font-family: monospace; color: #64748b;">BK-789-GRN</td>
-              <td>22 Oct 2026</td>
-              <td><span class="dash-status-label pending">Pending</span></td>
+              <td style="font-weight: 600; color: #0f172a;">{{ booking.tour.title }}</td>
+              <td>{{ booking.user.first_name|default:booking.user.email }}</td>
+              <td style="font-family: monospace; color: #64748b;">{{ booking.booking_id|truncatechars:15 }}</td>
+              <td>{{ booking.travel_date }}</td>
+              <td>
+                {% if booking.status == 'pending' %}
+                  <span class="dash-status-label pending">Pending</span>
+                {% elif booking.status == 'confirmed' %}
+                  <span class="dash-status-label">Confirmed</span>
+                {% else %}
+                  <span class="dash-status-label cancelled">{{ booking.status|title }}</span>
+                {% endif %}
+              </td>
             </tr>
+            {% empty %}
             <tr>
-              <td class="dash-checkbox-cell"><input type="checkbox"></td>
-              <td style="font-weight: 600; color: #0f172a;">Ooty Weekend Retreat Package</td>
-              <td>Amit Patel</td>
-              <td style="font-family: monospace; color: #64748b;">BK-012-BLK</td>
-              <td>05 Nov 2026</td>
-              <td><span class="dash-status-label">Confirmed</span></td>
+              <td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">No bookings found in database.</td>
             </tr>
-            <tr>
-              <td class="dash-checkbox-cell"><input type="checkbox"></td>
-              <td style="font-weight: 600; color: #0f172a;">Amritsar Golden Temple Tour</td>
-              <td>Neha Singh</td>
-              <td style="font-family: monospace; color: #64748b;">BK-345-WHT</td>
-              <td>12 Nov 2026</td>
-              <td><span class="dash-status-label cancelled">Cancelled</span></td>
-            </tr>
-            <tr>
-              <td class="dash-checkbox-cell"><input type="checkbox"></td>
-              <td style="font-weight: 600; color: #0f172a;">Darjeeling Tea Estate Stay</td>
-              <td>Vikram Verma</td>
-              <td style="font-family: monospace; color: #64748b;">BK-678-YLW</td>
-              <td>18 Nov 2026</td>
-              <td><span class="dash-status-label">Confirmed</span></td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -596,32 +589,112 @@ body {
         <button class="btn-panel">🖨️ Print</button>
         <button class="btn-panel">⋯</button>
       </div>
-      <h3>Kashmir Valley Special incl. Flights</h3>
+      <h3 id="rp-title">Select a booking</h3>
     </div>
     
     <div class="panel-content">
       <h4 class="info-section-title">Booking info</h4>
       <div class="info-grid">
         <div class="info-label">Booking ID</div>
-        <div class="info-value" style="font-family: monospace;">BK-456-BLU</div>
+        <div class="info-value" style="font-family: monospace;" id="rp-id">-</div>
         
         <div class="info-label">Price</div>
-        <div class="info-value">₹ 45,000.00</div>
+        <div class="info-value" id="rp-price">-</div>
         
         <div class="info-label">Customer</div>
-        <div class="info-value">Rahul Sharma</div>
+        <div class="info-value" id="rp-customer">-</div>
         
         <div class="info-label">Pax</div>
-        <div class="info-value">2 Adults, 1 Child</div>
+        <div class="info-value" id="rp-pax">-</div>
         
-        <div class="info-label">Processed</div>
-        <div class="info-value">12 Oct 2026</div>
+        <div class="info-label">Travel Date</div>
+        <div class="info-value" id="rp-date">-</div>
         
         <div class="info-label">Status</div>
-        <div class="info-value"><span class="dash-status-label">Confirmed</span></div>
+        <div class="info-value" id="rp-status">-</div>
+        
+        <div class="info-label">Payment Method</div>
+        <div class="info-value" id="rp-payment-method">-</div>
+        
+        <div class="info-label">Payment Status</div>
+        <div class="info-value" id="rp-payment-status">-</div>
       </div>
       
-      <a href="#" style="color: #38bdf8; font-size: 14px; font-weight: 600; text-decoration: none;">View full details ⌄</a>
+      <div style="margin-top: 25px;">
+        <h4 class="info-section-title">Passenger Details</h4>
+        <div id="rp-passengers" style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+          -
+        </div>
+
+<!-- Create Booking Modal -->
+<div id="createBookingModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: white; width: 100%; max-width: 600px; border-radius: 12px; max-height: 90vh; display: flex; flex-direction: column;">
+    <div style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0;">Create Offline Booking</h3>
+      <button onclick="document.getElementById('createBookingModal').style.display='none'" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+    </div>
+    
+    <div style="padding: 20px; overflow-y: auto; flex: 1;">
+      <form id="adminBookingForm" method="POST" action="{% url 'admin_create_booking' %}">
+        {% csrf_token %}
+        
+        <h5 style="margin-bottom: 15px; color: #0f172a;">Customer Details</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-12">
+            <label class="form-label">Email (If new, account will be auto-created)</label>
+            <input type="email" name="customer_email" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="customer_name" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Phone Number</label>
+            <input type="text" name="customer_phone" class="form-control" required>
+          </div>
+        </div>
+
+        <h5 style="margin-bottom: 15px; color: #0f172a;">Tour Details</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-12">
+            <label class="form-label">Select Tour</label>
+            <select name="tour_id" class="form-control" required>
+              <option value="">Choose a tour...</option>
+              {% for tour in all_tours %}
+              <option value="{{ tour.id }}">{{ tour.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Travel Date</label>
+            <input type="date" name="travel_date" class="form-control" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Adults</label>
+            <input type="number" id="admin_num_adults" name="num_adults" class="form-control" min="1" value="1" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Children</label>
+            <input type="number" id="admin_num_children" name="num_children" class="form-control" min="0" value="0">
+          </div>
+        </div>
+        
+        <h5 style="margin-bottom: 15px; color: #0f172a;">Passenger Details</h5>
+        <div id="admin-passenger-forms" style="margin-bottom: 20px;"></div>
+
+        <div style="text-align: right; border-top: 1px solid #eee; padding-top: 20px;">
+          <button type="button" onclick="document.getElementById('createBookingModal').style.display='none'" class="btn btn-secondary" style="margin-right: 10px;">Cancel</button>
+          <button type="submit" class="btn" style="background: #38bdf8; color: white;">Create Booking</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+      </div>
+      
+      <div style="margin-top: 30px; display: flex; gap: 10px; flex-wrap: wrap;" id="rp-actions">
+        <!-- Actions will be dynamically injected here via JS -->
+      </div>
 
       <div class="chart-placeholder">
         <h4>Booking trend</h4>
@@ -636,8 +709,151 @@ body {
           <div class="chart-bar" style="height: 90%;"></div>
         </div>
       </div>
+      </div>
     </div>
   </aside>
 
 </div>
+
+<script>
+function filterBookings(status, btnElement) {
+  // Update active tab style
+  var tabs = document.querySelectorAll('.admin-tabs button');
+  tabs.forEach(t => t.classList.remove('active'));
+  btnElement.classList.add('active');
+  
+  // Filter rows
+  var rows = document.querySelectorAll('.dash-table tbody tr.booking-row');
+  rows.forEach(row => {
+    if (status === 'all') {
+      row.style.display = '';
+    } else {
+      if (row.getAttribute('data-status') === status) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  });
+}
+
+// Passenger generation for Admin Modal
+document.addEventListener('DOMContentLoaded', function() {
+    const adultsInput = document.getElementById('admin_num_adults');
+    const childrenInput = document.getElementById('admin_num_children');
+    const container = document.getElementById('admin-passenger-forms');
+    
+    if(adultsInput && childrenInput && container) {
+        function generatePassengerFields() {
+          container.innerHTML = '';
+          const adults = parseInt(adultsInput.value) || 0;
+          const children = parseInt(childrenInput.value) || 0;
+          const totalPax = adults + children;
+          
+          for(let i=1; i<=totalPax; i++) {
+            let label = i <= adults ? `Adult ${i}` : `Child ${i - adults}`;
+            let html = `
+              <div class="pax-group" style="margin-bottom: 15px; padding: 15px; background: #f8fafc; border: 1px solid #ddd; border-radius: 10px;">
+                <p style="font-weight: 600; font-size: 14px; margin-bottom: 10px; color: #38bdf8;">Passenger ${i} (${label})</p>
+                <div class="row g-2">
+                  <div class="col-md-5">
+                    <input type="text" name="pax_name_${i}" class="form-control" placeholder="Full Name" required style="font-size: 14px;">
+                  </div>
+                  <div class="col-md-3">
+                    <input type="number" name="pax_age_${i}" class="form-control" placeholder="Age" required style="font-size: 14px;" min="1" max="100">
+                  </div>
+                  <div class="col-md-4">
+                    <select name="pax_gender_${i}" class="form-control" required style="font-size: 14px;">
+                      <option value="">Gender</option>
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                      <option value="O">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+          }
+        }
+        
+        adultsInput.addEventListener('input', generatePassengerFields);
+        childrenInput.addEventListener('input', generatePassengerFields);
+        generatePassengerFields(); // init
+    }
+});
+
+function updateRightPanel(tourTitle, bookingId, price, customer, pax, date, status, paymentMethod, paymentStatus, rowElement) {
+  document.getElementById('rp-title').textContent = tourTitle;
+  document.getElementById('rp-id').textContent = bookingId;
+  document.getElementById('rp-price').textContent = '₹ ' + price;
+  document.getElementById('rp-customer').textContent = customer;
+  document.getElementById('rp-pax').textContent = pax;
+  document.getElementById('rp-date').textContent = date;
+  document.getElementById('rp-payment-method').textContent = paymentMethod;
+  
+  var statusHtml = '';
+  if(status === 'pending') statusHtml = '<span class="dash-status-label pending">Pending</span>';
+  else if(status === 'confirmed') statusHtml = '<span class="dash-status-label">Confirmed</span>';
+  else statusHtml = '<span class="dash-status-label cancelled">' + (status.charAt(0).toUpperCase() + status.slice(1)) + '</span>';
+  document.getElementById('rp-status').innerHTML = statusHtml;
+  
+  var payStatusHtml = '';
+  var paymentStatusLower = paymentStatus.toLowerCase();
+  if(paymentStatusLower === 'paid') payStatusHtml = '<span style="color: #10b981; font-weight: 600;">Paid</span>';
+  else payStatusHtml = '<span style="color: #f59e0b; font-weight: 600;">' + paymentStatus + '</span>';
+  document.getElementById('rp-payment-status').innerHTML = payStatusHtml;
+  
+  // Passengers
+  var paxData = document.querySelector('.passenger-data-' + bookingId);
+  if (paxData) {
+      document.getElementById('rp-passengers').innerHTML = paxData.innerHTML;
+  }
+  
+  // Action Buttons
+  var actionsHtml = '';
+  if (status === 'pending') {
+      actionsHtml += `<button onclick="updateBooking('${bookingId}', 'confirmed', null)" style="background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer;">Confirm Booking</button>`;
+  }
+  if (paymentStatusLower === 'pending') {
+      actionsHtml += `<button onclick="updateBooking('${bookingId}', null, 'paid')" style="background: #3b82f6; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer;">Mark as Paid</button>`;
+  }
+  if (status !== 'cancelled') {
+      actionsHtml += `<button onclick="updateBooking('${bookingId}', 'cancelled', null)" style="background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer;">Cancel Booking</button>`;
+  }
+  document.getElementById('rp-actions').innerHTML = actionsHtml;
+  
+  var rows = document.querySelectorAll('.dash-table tbody tr');
+  rows.forEach(r => r.classList.remove('selected'));
+  if(rowElement) {
+    rowElement.classList.add('selected');
+  }
+}
+
+function updateBooking(bookingId, newStatus, newPaymentStatus) {
+    if (!confirm("Are you sure you want to update this booking?")) return;
+    
+    var payload = {};
+    if (newStatus) payload.status = newStatus;
+    if (newPaymentStatus) payload.payment_status = newPaymentStatus;
+    
+    fetch(`/admin-dashboard/update-booking/${bookingId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert('Error updating booking: ' + data.error);
+        }
+    })
+    .catch(err => console.error(err));
+}
+</script>
 {% endblock %}

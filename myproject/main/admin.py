@@ -61,7 +61,7 @@ class TourPackageAdmin(admin.ModelAdmin):
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('booking_id', 'user', 'tour', 'travel_date', 'status', 'total_price')
     list_filter = ('status', 'travel_date')
-    search_fields = ('booking_id', 'user__username', 'tour__title')
+    search_fields = ('booking_id', 'user__email', 'tour__title')
     readonly_fields = ('booking_id', 'created_at')
 
 @admin.register(Review)

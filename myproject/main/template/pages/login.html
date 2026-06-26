@@ -326,25 +326,27 @@
         <p>Join Poddar Tours & Travels for the best trips.</p>
       </div>
 
-      <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Registration submission mocked');">
+      <form action="{% url 'page' 'login' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="register">
         <div class="form-group">
           <label for="reg-name">Full Name</label>
-          <input type="text" id="reg-name" class="form-control-custom" placeholder="Enter your full name" required>
+          <input type="text" name="full_name" id="reg-name" class="form-control-custom" placeholder="Enter your full name" required>
         </div>
 
         <div class="form-group">
           <label for="reg-email">Email Address</label>
-          <input type="email" id="reg-email" class="form-control-custom" placeholder="Enter your email" required>
+          <input type="email" name="email" id="reg-email" class="form-control-custom" placeholder="Enter your email" required>
         </div>
 
         <div class="form-group">
           <label for="reg-phone">Phone Number</label>
-          <input type="tel" id="reg-phone" class="form-control-custom" placeholder="Enter your mobile number" required>
+          <input type="tel" name="phone" id="reg-phone" class="form-control-custom" placeholder="Enter your mobile number" required>
         </div>
 
         <div class="form-group">
           <label for="reg-password">Password</label>
-          <input type="password" id="reg-password" class="form-control-custom" placeholder="Create a strong password" required oninput="checkPasswordStrength(this.value)">
+          <input type="password" name="password" id="reg-password" class="form-control-custom" placeholder="Create a strong password" required oninput="checkPasswordStrength(this.value)">
           
           <div id="password-strength-box" style="margin-top: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
             <p style="margin-top: 0; margin-bottom: 8px; font-size: 13px; color: #fff; font-weight: 600;">Password Requirements:</p>
@@ -359,7 +361,7 @@
         
         <div class="form-group">
           <label for="reg-confirm">Confirm Password</label>
-          <input type="password" id="reg-confirm" class="form-control-custom" placeholder="Repeat your password" required>
+          <input type="password" name="confirm_password" id="reg-confirm" class="form-control-custom" placeholder="Repeat your password" required>
         </div>
 
         <button type="submit" class="btn-auth">Sign Up</button>

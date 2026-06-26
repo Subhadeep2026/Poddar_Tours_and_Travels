@@ -158,9 +158,31 @@ class TourPackage(models.Model):
 
     is_featured = models.BooleanField(default=False)
 
+    upcoming_dates = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Enter upcoming departure dates, e.g., 'May 20, June 5, July 12'"
+    )
+
     is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def parsed_upcoming_dates_json(self):
+        import datetime
+        import json
+        dates = []
+        if self.upcoming_dates:
+            parts = [p.strip() for p in self.upcoming_dates.split(',')]
+            for p in parts:
+                try:
+                    # Parse "June 10" and append the current logical year for the project (2026)
+                    dt = datetime.datetime.strptime(p + " 2026", "%B %d %Y")
+                    dates.append(dt.strftime("%Y-%m-%d"))
+                except ValueError:
+                    pass
+        return json.dumps(dates)
 
     def __str__(self):
         return self.title
@@ -269,6 +291,17 @@ class Booking(models.Model):
         ('completed', 'Completed'),
     )
 
+    PAYMENT_METHOD_CHOICES = (
+        ('online', 'Online Payment'),
+        ('offline', 'Pay Later / Offline'),
+    )
+    
+    PAYMENT_STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+    )
+
     booking_id = models.CharField(
         max_length=20,
         unique=True,
@@ -304,6 +337,18 @@ class Booking(models.Model):
         default='pending'
     )
 
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHOD_CHOICES,
+        default='offline'
+    )
+
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='pending'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -313,6 +358,26 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.booking_id} - {self.user.email}"
+
+
+# =========================================================
+# PASSENGER MODEL
+# =========================================================
+
+class Passenger(models.Model):
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    )
+    
+    booking = models.ForeignKey(Booking, related_name='passengers', on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    age = models.PositiveIntegerField()
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    
+    def __str__(self):
+        return f"{self.name} ({self.age} - {self.gender})"
 
 
 # =========================================================
@@ -384,17 +449,33 @@ class Enquiry(models.Model):
         return f"Enquiry from {self.name}"
 
 
+
 # =========================================================
 # NEWSLETTER MODEL
 # =========================================================
 
 class Newsletter(models.Model):
-
     email = models.EmailField(unique=True)
-
     is_active = models.BooleanField(default=True)
-
     subscribed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.email
+
+
+# =========================================================
+# CHATBOT MODELS
+# =========================================================
+
+class ChatMessage(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    session_id = models.CharField(max_length=100, null=True, blank=True)
+    message = models.TextField()
+    is_bot = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{'Bot' if self.is_bot else 'User'}: {self.message[:50]}"
